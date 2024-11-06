@@ -14,6 +14,13 @@ java {
 	}
 }
 
+configurations {
+	compileOnly{
+		extendsFrom annotationProcessor
+	}
+}
+
+
 repositories {
 	mavenCentral()
 }
@@ -24,8 +31,15 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' // MyBatisの依存関係
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+
+
+
+	implementation 'org.apache.commons:commons-lang3:3.14.0'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.32' // MySQLの依存関係の修正
 }
 
 tasks.named('test') {
