@@ -12,6 +12,7 @@ import raisetech.StudentManagement.domain.StudentDetail ;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentsCourses;
 import raisetech.StudentManagement.service.StudentService;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -28,7 +29,7 @@ public class StudentController {
 
     @GetMapping("/studentList")
     public String getStudentList(Model model) {
-        List<Student> students = service.searchStudentList();
+ List<Student> students = service.searchStudentList();
         List<StudentsCourses> studentsCourses = service.searchStudentsCourseList();
 
         model.addAttribute("studentList", converter.convertStudentDetails(students, studentsCourses));
@@ -42,12 +43,14 @@ public class StudentController {
 
     @GetMapping("/newStudent")
     public String newStudent(Model model) {
-        model.addAttribute("student", new StudentDetail());
+        StudentDetail studentDetail = new StudentDetail();
+        studentDetail.setStudentsCourses(Arrays.asList(new StudentsCourses()));
+        model.addAttribute("student", studentDetail);
         return "registerStudent";
     }
 
     @PostMapping("/registerStudent")
-    public String registerStudent(@ModelAttribute("student") StudentDetail studentDetail, BindingResult result) {
+    public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
         if (result.hasErrors()) {
             return "registerStudent";
         }
