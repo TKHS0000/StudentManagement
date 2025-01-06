@@ -31,7 +31,7 @@ public class StudentService {
     }
 
     public StudentDetail searchStudent(String id) {
-        Student student = (Student) repository.searchStudent(id);
+        Student student = repository.searchStudent(id);
         List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getId()) ;
         StudentDetail studentDetail = new StudentDetail();
         studentDetail.setStudent(student);
@@ -46,12 +46,12 @@ public class StudentService {
 
     @Transactional
     public void registerStudent(StudentDetail studentDetail) {
-        repository.updateStudent(studentDetail.getStudent());
+        repository.registerStudent(studentDetail.getStudent());
         for(StudentsCourses studentsCourse:studentDetail.getStudentsCourses()){
             studentsCourse.setStudentsId(studentDetail.getStudent().getId());
             studentsCourse.setCourseStart(LocalDateTime.now());
             studentsCourse.setCourseEnd(LocalDateTime.now().plusYears(1));
-            repository.updateStudentCourses(studentsCourse) ;
+            repository.registerStudentCourses(studentsCourse) ;
         }
     }
     @Transactional
