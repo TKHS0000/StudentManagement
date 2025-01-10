@@ -12,18 +12,17 @@ public interface StudentRepository {
     @Select("SELECT * FROM students")
     List<Student> search();
 
-    @Select("SELECT * FROM students_courses WHERE students_id = #{id}")
-    Student searchStudent(String id);
+    @Select("SELECT * FROM students WHERE id = #{Id}")
+    Student searchStudent(String Id);
 
     @Select("SELECT * FROM students_courses")
     List<StudentsCourses> searchStudentsCoursesList();
 
-    @Select("SELECT * FROM students_courses WHERE students_id = #{studentsId}")
-    List<StudentsCourses> searchStudentsCourses(String studentsId);
+    @Select("SELECT * FROM students_courses WHERE students_id = #{studentsid}")
+    List<StudentsCourses> searchStudentsCourses(String studentsid);
 
 
-    @Insert(
-            "INSERT INTO students(name, kana, nickname, email, region, age, gender, remark, isDeleted) "
+    @Insert("INSERT INTO students(name, kana, nickname, email, region, age, gender, remark, isDeleted) "
                     + "VALUES(#{name}, #{kana},#{nickname},#{email}, #{region}, #{age}, #{gender}, #{remark}, false)")
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
