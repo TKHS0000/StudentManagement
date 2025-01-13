@@ -67,6 +67,7 @@ public class StudentController {
         return "redirect:/studentList";
     }
 
+
     @PostMapping("/updateStudent")
     public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
        if (result.hasErrors()) {
@@ -75,6 +76,6 @@ public class StudentController {
        service.updateStudent(studentDetail);
        return "redirect:/studentList";
 
-
+//
         }
     }
