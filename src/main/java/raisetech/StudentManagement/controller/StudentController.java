@@ -13,6 +13,7 @@ import raisetech.StudentManagement.domain.StudentDetail ;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentsCourses;
 import raisetech.StudentManagement.service.StudentService;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,13 +59,14 @@ public class StudentController {
 
 
     @PostMapping("/registerStudent")
-    public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    public String registerStudent(@ModelAttribute("studentDetail") StudentDetail studentDetail, BindingResult result) {
         if (result.hasErrors()) {
             return "registerStudent";
         }
         service.registerStudent(studentDetail);
         return "redirect:/studentList";
     }
+
 
     @PostMapping("/updateStudent")
     public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
@@ -74,6 +76,6 @@ public class StudentController {
         service.updateStudent(studentDetail);
         return "redirect:/studentList";
 
-
+//
     }
 }

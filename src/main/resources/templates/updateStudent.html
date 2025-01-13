@@ -28,25 +28,35 @@
   </div>
   <div>
     <label for="age">年齢:</label>
-    <input type="text" id="age" th:field="*{student.age}"  />
+    <input type="text" id="age" th:field="*{student.age}" />
   </div>
   <div>
     <label for="gender">性別:</label>
-    <input type="text" id="gender" th:field="*{student.gender}"  />
+    <input type="text" id="gender" th:field="*{student.gender}" />
   </div>
   <div>
     <label for="remark">備考:</label>
-    <input type="text" id="remark" th:field="*{student.remark}"  />
+    <input type="text" id="remark" th:field="*{student.remark}" />
   </div>
 
   <div th:each="course, stat : *{studentsCourses}">
-    <label for="id" th:for="studentsCourses.__${stat.index}__.studentsCourse">受講コースID: </label>
-    <input type="text" id="studentsCourse" th:id="studentsCourses.__${stat.index}__.id"
+    <label for="id"
+           th:for="studentsCourses.__${stat.index}__.id">受講コースID: </label>
+    <input type="text" id="id" th:id="studentsCourses.__${stat.index}__.id"
            th:field="*{studentsCourses[__${stat.index}__].id}" />
+
+    <label for="studentsCourse"
+           th:for="studentsCourses.__${stat.index}__.studentsCourse">受講コース名: </label>
+
+    <input type="text" id="studentsCourse" th:id="studentsCourses.__${stat.index}__.studentsCourse"
+           th:field="*{studentsCourses[__${stat.index}__].studentsCourse}" />
+
   </div>
+
   <div>
-    <button type="submit">更新２</button>
+    <button type="submit">更新</button>
   </div>
+
 </form>
 </body>
 </html>
