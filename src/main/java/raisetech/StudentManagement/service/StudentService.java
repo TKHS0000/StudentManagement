@@ -3,6 +3,7 @@ package raisetech.StudentManagement.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import raisetech.StudentManagement.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentsCourses;
 import raisetech.StudentManagement.domain.StudentDetail;
@@ -19,16 +20,20 @@ public class StudentService {
     @Autowired
 
     private StudentRepository repository;
+    private StudentConverter converter;
 
-    public StudentService(StudentRepository repository) {
+    public StudentService(StudentRepository repository, StudentConverter converter) {
         this.repository = repository;
+        this.converter = converter;
     }
 
-    public List<Student> searchStudentList() {
-        return repository.search();
 
-
+    public List<StudentDetail> searchStudentList() {
+        List<Student> students = repository.search();
+        List<StudentsCourses> studentsCoursesList = repository.searchStudentsCoursesList(); // 追加
+        return converter.convertStudentDetails(students, studentsCoursesList);
     }
+
 
     public StudentDetail searchStudent(String id) {
         Student student = repository.searchStudent(id);
@@ -45,15 +50,39 @@ public class StudentService {
     }
 
     @Transactional
-    public void registerStudent(StudentDetail studentDetail) {
-        repository.registerStudent(studentDetail.getStudent());
-        for(StudentsCourses studentsCourse:studentDetail.getStudentsCourses()){
-            studentsCourse.setStudentsId(studentDetail.getStudent().getId());
-            studentsCourse.setCourseStart(LocalDateTime.now());
-            studentsCourse.setCourseEnd(LocalDateTime.now().plusYears(1));
-            repository.registerStudentCourses(studentsCourse) ;
-        }
+//    public StudentDetail registerStudent(StudentDetail studentDetail) {
+//        repository.registerStudent(studentDetail.getStudent());
+//        for(StudentsCourses studentsCourse:studentDetail.getStudentsCourses()){
+//            studentsCourse.setStudentsId(studentDetail.getStudent().getId());
+//            studentsCourse.setCourseStart(LocalDateTime.now());
+//            studentsCourse.setCourseEnd(LocalDateTime.now().plusYears(1));
+//            repository.registerStudentCourses(studentsCourse) ;
+//        }
+//    }
+    public StudentDetail registerStudent(StudentDetail studentDetail) {
+        Student student = studentDetail.getStudent();
+
+
+        repository.registerStudent(student);
+
+
+        studentDetail.getStudentsCourses().forEach(studentCourse -> {
+            initStudentsCourse(studentCourse, student); // 修正: studentCourse を渡す
+            repository.registerStudentCourses(studentCourse);
+        });
+
+        return studentDetail;
     }
+    void initStudentsCourse(StudentsCourses studentCourse, Student student) {
+        LocalDateTime now = LocalDateTime.now();
+
+        studentCourse.setId(student.getId());
+        studentCourse.setCourseStart(now);
+        studentCourse.setCourseEnd(now.plusYears(1));
+    }
+
+
+
     @Transactional
     public void updateStudent(StudentDetail studentDetail) {
         repository.updateStudent(studentDetail.getStudent());

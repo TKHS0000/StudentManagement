@@ -28,18 +28,15 @@ public class StudentController {
         this.converter = converter;
     }
 
+
     @GetMapping("/studentList")
     public List<StudentDetail> getStudentList() {
-        List<Student> students = service.searchStudentList();
-        List<StudentsCourses> studentsCourses = service.searchStudentsCourseList();
-        return converter.convertStudentDetails(students, studentsCourses) ;
+        return service.searchStudentList() ;
     }
 
     @GetMapping("/student/{id}")
-    public String getStudent(@PathVariable String id, Model model) {
-        StudentDetail studentDetail = service.searchStudent(id);
-        model.addAttribute("studentDetail", studentDetail);
-        return "updateStudent";
+    public StudentDetail getStudent(@PathVariable String id) {
+        return service.searchStudent(id);
     }
 
     @GetMapping("/newStudent")
@@ -50,21 +47,22 @@ public class StudentController {
         return "registerStudent";
     }
 
-    @PostMapping("/registerStudent")
-    public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-        if (result.hasErrors()) {
-            return "registerStudent";
-        }
-        service.registerStudent(studentDetail);
-        return "redirect:/studentList";
-    }
-
     @PostMapping("/updateStudent")
     public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
         service.updateStudent(studentDetail);
-
         return ResponseEntity.ok("更新処理が成功しました。");
     }
 
+   @PostMapping("/registerStudent")
+   public ResponseEntity<String> registerStudent(@RequestBody StudentDetail studentDetail) {
+      service.registerStudent(studentDetail);
+       return ResponseEntity.ok("登録処理が成功しました。");
+   }
+
+ //   @PostMapping("/registerStudent")
+//public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+  //      StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
+   //     return ResponseEntity.ok(responseStudentDetail);
+ //   }
 
 }

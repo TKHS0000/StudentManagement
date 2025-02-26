@@ -3,6 +3,7 @@ package raisetech.StudentManagement.repository;
 import org.apache.ibatis.annotations.*;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentsCourses;
+import raisetech.StudentManagement.domain.StudentDetail;
 
 import java.util.List;
 
@@ -18,8 +19,8 @@ public interface StudentRepository {
     @Select("SELECT * FROM students_courses")
     List<StudentsCourses> searchStudentsCoursesList();
 
-    @Select("SELECT * FROM students_courses WHERE students_id = #{studentsid}")
-    List<StudentsCourses> searchStudentsCourses(String studentsid);
+    @Select("SELECT * FROM students_courses WHERE students_id = #{studentsId}")
+    List<StudentsCourses> searchStudentsCourses(String studentsId);
 
 
     @Insert("INSERT INTO students(name, kana, nickname, email, region, age, gender, remark, isDeleted) "
@@ -43,5 +44,5 @@ public interface StudentRepository {
     void updateStudentCourses(StudentsCourses studentsCourses);
 
 
-
+    void convertStudentDatails();
 }
